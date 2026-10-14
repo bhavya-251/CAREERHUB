@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% block title %}Project Collaboration · CareerHub{% endblock %}{% block crumb %}Project Collaboration{% endblock %}{% block content %}
+<div class="page-wrap">
+<section class="page-heading"><div class="eyebrow">BUILD TOGETHER</div><h1>Project collaboration<span class="dot">.</span></h1><p class="muted">Share what you're building, list the skills you need, and connect with students who can contribute.</p></section>
+<div class="content-grid projects-layout">
+<section class="panel add-panel">
+<div class="panel-heading"><div><h2>Find teammates</h2><p>Open project calls posted by students.</p></div></div>
+{% for post in posts %}
+<article class="project-card" style="margin-bottom:14px">
+<div class="card-top"><span class="pill">{{post.status}}</span><span class="muted small">Posted by {{post.owner_name}}</span></div>
+<h3>{{post.title}}</h3><p>{{post.description}}</p>
+{% if post.required_skills %}<p><b>Skills needed:</b> {{post.required_skills}}</p>{% endif %}
+{% if post.roles_needed %}<p><b>Looking for:</b> {{post.roles_needed}}</p>{% endif %}
+{% if post.owner_skills %}<p class="muted small">Poster's skills: {{post.owner_skills}}</p>{% endif %}
+{% if post.user_id != session.get('user_id') and not post.already_connected %}
+<form method="post" action="{{url_for('connect_project',post_id=post.id)}}" class="stack-form">
+<label>Message to project owner<textarea name="message" rows="2" placeholder="Hi! I'd like to help with this project because..."></textarea></label>
+<button class="btn primary" type="submit">Request to connect</button></form>
+{% elif post.user_id == session.get('user_id') %}<p class="muted small">This is your post. Manage requests in Project Chats.</p>
+{% else %}<p class="muted small">You've already requested to connect.</p>{% endif %}
+</article>
+{% else %}<div class="empty-state"><b>No open collaboration posts yet.</b><p>Be the first to post your project and invite teammates.</p></div>{% endfor %}
+</section>
+<section class="panel add-panel"><div class="panel-heading"><div><h2>Post a project</h2><p>Tell students what you're building and which skills you need.</p></div></div>
+<form method="post" class="stack-form">
+<input type="hidden" name="action" value="collab">
+<label>Project title<input name="collab_title" required placeholder="e.g. AI Resume Matcher"></label>
+<label>What are you building?<textarea name="collab_description" rows="4" required placeholder="Explain the idea, goal, and current progress."></textarea></label>
+<label>Required skills<input name="required_skills" placeholder="Python, React, UI/UX, ML"></label>
+<label>Members / roles needed<input name="roles_needed" placeholder="Frontend developer, ML teammate, designer"></label>
+<button class="btn primary full" type="submit">＋ Publish collaboration post</button></form>
+<a class="btn secondary full" href="{{url_for('project_chats')}}" style="margin-top:12px">View project requests and chats ↗</a>
+</section></div>
+<section class="section-heading"><div><h2>My project portfolio</h2><p>Keep a record of projects you've built.</p></div></section>
+<div class="content-grid projects-layout"><section><div class="project-grid">
+{% for p in projects %}<article class="project-card"><div class="project-art">✧</div><h3>{{p.title}}</h3><p>{{p.description or 'A project in your growing portfolio.'}}</p><div class="tags">{% for t in p.tech.split(',') if t.strip() %}<span>{{t.strip()}}</span>{% endfor %}</div><div class="project-links">{% if p.github %}<a href="{{p.github}}" target="_blank" rel="noopener">GitHub ↗</a>{% endif %}{% if p.demo %}<a href="{{p.demo}}" target="_blank" rel="noopener">Live demo ↗</a>{% endif %}<form method="post" action="{{url_for('delete_project',pid=p.id)}}" onsubmit="return confirm('Delete this project?')"><button class="text-danger">Delete</button></form></div></article>{% else %}<div class="empty-state"><b>Your portfolio is ready for its first project.</b><p>Add a project below to keep track of your work.</p></div>{% endfor %}
+</div></section><section class="panel add-panel"><div class="panel-heading"><div><h2>Add to portfolio</h2><p>Personal projects you've already built.</p></div></div><form method="post" class="stack-form"><input type="hidden" name="action" value="portfolio"><label>Project title<input name="title" required></label><label>Description<textarea name="description" rows="3"></textarea></label><label>Technologies<input name="tech" placeholder="Python, Flask, SQL"></label><label>GitHub URL<input type="url" name="github"></label><label>Live demo URL<input type="url" name="demo"></label><button class="btn primary full">＋ Add to portfolio</button></form></section></div></div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Project Chats · CareerHub{% endblock %}{% block crumb %}Project Chats{% endblock %}{% block content %}
+<div class="page-wrap"><section class="page-heading"><div class="eyebrow">TEAM UP</div><h1>Project requests & chats</h1><p class="muted">Accept a student's request to unlock the project chat.</p></section>
+<div class="panel">{% for c in connections %}<div class="opportunity-row"><div class="op-copy"><b>{{c.title}}</b><small>{% if c.owner_id == uid %}Interested student: {{c.applicant_name}}{% else %}Project owner: {{c.owner_name}}{% endif %} · Request status: {{c.status}}</small></div>
+{% if c.owner_id == uid and c.status == 'Pending' %}<form method="post" action="{{url_for('project_chat_status',cid=c.id)}}" style="display:flex;gap:8px"><button class="btn primary" name="status" value="Accepted">Accept</button><button class="btn secondary" name="status" value="Declined">Decline</button></form>
+{% elif c.status == 'Accepted' %}<a class="btn primary" href="{{url_for('project_chat',cid=c.id)}}">Open chat ↗</a>
+{% else %}<span class="pill">{{c.status}}</span>{% endif %}</div>{% else %}<div class="empty-state"><b>No project requests yet.</b><p>When someone requests to join your project, it will appear here.</p></div>{% endfor %}</div></div>{% endblock %}

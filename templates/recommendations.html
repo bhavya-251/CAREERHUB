@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Career Recommendations · CareerHub{% endblock %}
+{% block crumb %}Career Recommendations{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">YOUR NEXT STEP</p><h1>Career recommendations</h1><p>Use your skills and interests to discover relevant companies.</p></div></section>
+<div class="panel" style="max-width:900px"><form method="post" class="stack-form">
+<label>Skills (comma-separated)<textarea name="skills" rows="2" placeholder="Python, SQL, Java, AWS">{{skills}}</textarea></label>
+<label>Career interests<textarea name="interests" rows="2" placeholder="Software engineering, data analytics, space technology">{{interests}}</textarea></label>
+<button class="btn primary" type="submit">Save and recommend</button></form></div>
+<div class="section-heading"><div><h2>Suggested company career pages</h2><p>Ranked using simple keyword matching from your profile.</p></div></div>
+<div class="cards-grid">{% for c in companies %}<article class="opportunity-card"><div class="card-top"><span class="pill">Company careers</span><span class="card-icon">↗</span></div><h3>{{c.name}}</h3><p>{{c.roles}}</p><a class="btn secondary" href="{{c.url}}" target="_blank" rel="noopener noreferrer">Visit official careers page ↗</a></article>{% endfor %}</div>
+<div class="notice"><b>Please note:</b> These are official career pages, not confirmation of currently open internships. Check each page for current vacancies, eligibility, location, and deadlines. Recommendations are keyword-based and are not AI-generated.</div>
+{% endblock %}

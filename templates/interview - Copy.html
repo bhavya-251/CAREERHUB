@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Mock Interview · CareerHub{% endblock %}
+{% block crumb %}Mock Interview{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">PRACTICE ROOM</p><h1>Mock interview</h1><p>Practice for a wide range of careers, from software and AI to design, business and internships.</p></div></section>
+<div class="panel" style="max-width:850px">
+<form method="get" class="form-grid">
+<label>Choose a role
+<select name="role" onchange="this.form.submit()">{% for r in roles %}<option value="{{r}}" {% if role==r %}selected{% endif %}>{{r}}</option>{% endfor %}</select></label>
+<label>Or enter any role
+<input name="custom_role" placeholder="e.g. Robotics Engineer, Space Software Intern" value="{{ role if role not in roles else '' }}"></label>
+<button class="btn primary" type="submit">Start practice</button>
+</form>
+{% if question %}
+<div class="question-card"><span class="eyebrow">PRACTICE QUESTION · {{ role }}</span><h2>{{question.question}}</h2></div>
+<form method="post" class="stack-form">
+<input type="hidden" name="role" value="{{role}}">
+<input type="hidden" name="custom_role" value="{{role}}">
+<input type="hidden" name="question_id" value="{{question.id}}">
+<label>Your answer<textarea name="answer" rows="7" required placeholder="Write your answer here...">{{answer}}</textarea></label>
+<button class="btn primary" type="submit">Review my answer</button>
+</form>
+{% if feedback %}<div class="notice"><b>Feedback</b><p>{{feedback}}</p><b>Points to consider</b><p>{{question.sample_points}}</p>{% endif %}
+{% else %}<p>No questions are available yet.</p>{% endif %}
+<div class="divider"></div><h3>Questions in this practice set</h3><ul class="question-list">{% for q in questions %}<li>{{q.question}}</li>{% endfor %}</ul>
+<p class="muted small">For roles without a dedicated question set, CareerHub uses general interview questions as a starter. Feedback is rule-based and does not evaluate technical correctness. More role-specific question banks can be added later.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}{{ 'Create account' if mode=='signup' else 'Log in' }} — CareerHub{% endblock %}{% block content %}
+<div class="auth-shell"><a class="brand auth-brand" href="/"><span class="brand-icon">✦</span> Career<span>Hub</span></a><div class="auth-card"><div class="auth-symbol">✦</div><div class="eyebrow centered">YOUR NEXT CHAPTER</div><h1>{{ 'Create your account' if mode=='signup' else 'Welcome back' }}</h1><p class="muted">{{ 'Start building your career story today.' if mode=='signup' else 'Pick up where your ambition left off.' }}</p>
+<form method="post" class="form">
+{% if mode=='signup' %}<label>Full name<input name="name" placeholder="Your name" required autocomplete="name"></label>{% endif %}
+<label>Email address<input type="email" name="email" placeholder="you@example.com" required autocomplete="email"></label>
+<label>Password<input type="password" name="password" placeholder="At least 6 characters" minlength="6" required autocomplete="{{ 'new-password' if mode=='signup' else 'current-password' }}"></label>
+<button class="btn primary full" type="submit">{{ 'Create account' if mode=='signup' else 'Log in' }} <span>↗</span></button></form>
+<p class="auth-switch">{% if mode=='signup' %}Already have an account? <a href="{{ url_for('login') }}">Log in</a>{% else %}New to CareerHub? <a href="{{ url_for('signup') }}">Create an account</a>{% endif %}</p></div><p class="auth-foot">By continuing, you’re taking a step toward your future.</p></div>{% endblock %}
